@@ -15,6 +15,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.remote.MobileCapabilityType;
+import testMobileBankingN.tools.PingAndroid;
 
 @RunWith(ConfigRunner.class)
 public class ToolsPrintScreen {
@@ -52,6 +53,10 @@ public class ToolsPrintScreen {
 	@Test
 	public void screenshot() {
 		
+		//ping android while waiting for user action and keep session up after more tahn 60s inactivity
+		PingAndroid pingAndroid = new PingAndroid(adDriver);
+		pingAndroid.start();
+		
 		System.out.println("This handy script is used for taking screenshot");
 		
 		Scanner scanner = new Scanner(System.in);
@@ -75,7 +80,7 @@ public class ToolsPrintScreen {
 			col++;
 			
 		}
-		
+
 	}
 
 }
