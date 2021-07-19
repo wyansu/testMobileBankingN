@@ -94,6 +94,8 @@ public class TransferOverbookingTest {
 		final String inputDateXPath ="//android.view.View[contains(@content-desc,'"+ config.getResourceValue("input_date_manually_input")+"')]//android.widget.EditText";
 		final String transferConfirmationXPath = "//android.widget.Button[@content-desc='"+config.getResourceValue("transfer_confirmation_button")+"']";
 		final String passwordNeededXPath = " //android.view.View[@content-desc='"+ config.getResourceValue("transfer_password_confirmation_page")+"']//following-sibling::android.widget.EditText";
+		final String transferStatusXPath ="//android.view.View[@content-desc='"+config.getResourceValue("proof_successfull_overbooking_message")+"']";
+		
 		
 		if(CommonTest.needPin(adDriver)) {
 			CommonTest.inputPin(adDriver, config.getResourceValue("login_after_locked_page"), config.getParameterValue("PIN"));
@@ -169,7 +171,7 @@ public class TransferOverbookingTest {
 		if(((HasOnScreenKeyboard) adDriver).isKeyboardShown()) adDriver.hideKeyboard();
 		
 		
-		if(config.getParameterValue("DateFromCalendar").toUpperCase().equals("YES")) {
+		/*if(config.getParameterValue("DateFromCalendar").toUpperCase().equals("YES")) {
 			adDriver.findElementByXPath(tanggalXPath).click();
 			CommonTest.selectDateFromCalendar(adDriver, config.getParameterValue("Date"), new Locale("in", "ID"));
 		
@@ -189,7 +191,14 @@ public class TransferOverbookingTest {
 			
 			adDriver.findElementByXPath("//android.widget.Button[@content-desc='"+ config.getResourceValue("ok_calendar_button") +"']").click();
 			
+		} */
+		
+		if(config.getParameterValue("DateFromCalendar").toUpperCase().equals("YES")) {
+			adDriver.findElementByXPath(tanggalXPath).click();
+			CommonTest.seekDateFromCalendar(adDriver, config.getParameterValue("Date"), config, config.getLocale());
+			
 		}
+		
 		
 		//selanjutnya		
 		adDriver.findElementByXPath("//android.widget.Button[@content-desc='"+config.getResourceValue("next_step_transfer_button")+"']").click();
@@ -212,7 +221,9 @@ public class TransferOverbookingTest {
 			adDriver.findElementByXPath("//android.widget.Button[@content-desc='"+config.getResourceValue("next_step_transfer_button")+"']").click();
 		}
 		
-		
+		//bukti transaksi loaded
+		AndroidElement buktiTransaksiEl  = (AndroidElement) new WebDriverWait(adDriver, config.getElementSearchTimeout()).until(
+				ExpectedConditions.elementToBeClickable(By.xpath(transferStatusXPath)));
 		
 	}
 

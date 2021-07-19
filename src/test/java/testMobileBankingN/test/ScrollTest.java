@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -63,12 +65,153 @@ public class ScrollTest {
 	}
 	
 	@Test
-	public void scrollTest() throws  IOException {
+	public void scrollTest() {
 		
-		//PropertyResourceBundle propertyResourceBundle = new PropertyResourceBundle(new FileReader(new File("./src/test/resources/lang/String.properties")));
-		ResourceBundle propertyResourceBundle = ResourceBundle.getBundle("lang/String", new Locale("en", "ID"));	
+		String datetoSeek = "19/10/2021";
+		Locale locale = new Locale("id", "ID");
+		
+		DateTimeFormatter yearOnly = DateTimeFormatter.ofPattern("yyyy", locale);
+		DateTimeFormatter monthOnly = DateTimeFormatter.ofPattern("LLLL", locale);
+		DateTimeFormatter dateOnly = DateTimeFormatter.ofPattern("d", locale);
+		
+		
+		LocalDate dateToSeekInLocalDate = LocalDate.parse(datetoSeek,DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+		String year = dateToSeekInLocalDate.format(yearOnly).toString();
+		String month = dateToSeekInLocalDate.format(monthOnly).toString();
+		String date = dateToSeekInLocalDate.format(dateOnly).toString();
+		
+		LocalDate now = LocalDate.now();
+		
+		int yearDiff = dateToSeekInLocalDate.getYear() - now.getYear();
+		if(yearDiff > 0) {
+			
+			AndroidElement calendarEl  = (AndroidElement) new WebDriverWait(adDriver, config.getElementSearchTimeout()).until(
+					ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.SeekBar[1]")));
+			int i =0;
+			while(i < yearDiff) {
+
+				
+				Rectangle rec = calendarEl.getRect();
+				
+				TouchAction action = new TouchAction(adDriver);
+				action.press(PointOption.point( rec.getX() + rec.getWidth()/2, rec.getY() + (rec.getHeight()/2)+30))
+					.waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
+						.moveTo(PointOption.point(rec.getX() + rec.getWidth()/2, rec.getY() +(rec.getHeight()/2)-30 ))
+						.release();
+				action.perform();
+				
+				i++;
+				
+			}
+
+		}
+		else if(yearDiff < 0) {
+			throw new IllegalArgumentException("Date is behind from now");
+		}
+		
+		int monthDiff = dateToSeekInLocalDate.getMonthValue() - now.getMonthValue();
+		
+		if(monthDiff > 0) {
+			
+			AndroidElement calendarEl  = (AndroidElement) new WebDriverWait(adDriver, config.getElementSearchTimeout()).until(
+					ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.SeekBar[2]")));
+			int i =0;
+			while(i< monthDiff ) {
+				
+				Rectangle rec = calendarEl.getRect();
+				
+				TouchAction action = new TouchAction(adDriver);
+				action.press(PointOption.point( rec.getX() + rec.getWidth()/2, rec.getY() + (rec.getHeight()/2)+30))
+					.waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
+						.moveTo(PointOption.point(rec.getX() + rec.getWidth()/2, rec.getY() +(rec.getHeight()/2)-30 ))
+						.release();
+				action.perform();
+				
+				i++;
+				
+			}
+		
+		}
+		else if(yearDiff == 0 && monthDiff < 0) {
+			throw new IllegalArgumentException("Date is behind from now");
+		}
+		
+		else if (monthDiff < 0) {
+			
+			AndroidElement calendarEl  = (AndroidElement) new WebDriverWait(adDriver, config.getElementSearchTimeout()).until(
+					ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.SeekBar[2]")));
+			int i =monthDiff;
+			while(i< 0 ) {
+				
+				Rectangle rec = calendarEl.getRect();
+				
+				TouchAction action = new TouchAction(adDriver);
+				action.press(PointOption.point( rec.getX() + rec.getWidth()/2, rec.getY() + (rec.getHeight()/2)-30))
+					.waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
+						.moveTo(PointOption.point(rec.getX() + rec.getWidth()/2, rec.getY() +(rec.getHeight()/2)+30 ))
+						.release();
+				action.perform();
+				
+				i++;
+				
+			}
+			
+		}
+		
+		int dateDiff = dateToSeekInLocalDate.getDayOfMonth() - now.getDayOfMonth();
+		if(yearDiff==0 && monthDiff==0 && dateDiff<0) {
+			throw new IllegalArgumentException("Date is behind from now");
+		}
+		else if(dateDiff < 0) {
+			
+			AndroidElement calendarEl  = (AndroidElement) new WebDriverWait(adDriver, config.getElementSearchTimeout()).until(
+					ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.SeekBar[3]")));
+			int i =dateDiff;
+			while(i< 0 ) {
+				
+				Rectangle rec = calendarEl.getRect();
+				
+				TouchAction action = new TouchAction(adDriver);
+				action.press(PointOption.point( rec.getX() + rec.getWidth()/2, rec.getY() + (rec.getHeight()/2)-30))
+					.waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
+						.moveTo(PointOption.point(rec.getX() + rec.getWidth()/2, rec.getY() +(rec.getHeight()/2)+30 ))
+						.release();
+				action.perform();
+				
+				i++;
+				
+			}
+			
+		}else if(dateDiff > 0) {
+			
+			AndroidElement calendarEl  = (AndroidElement) new WebDriverWait(adDriver, config.getElementSearchTimeout()).until(
+					ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.SeekBar[3]")));
+			int i =0;
+			while(i< dateDiff ) {
+				
+				Rectangle rec = calendarEl.getRect();
+				
+				TouchAction action = new TouchAction(adDriver);
+				action.press(PointOption.point( rec.getX() + rec.getWidth()/2, rec.getY() + (rec.getHeight()/2)+30))
+					.waitAction(WaitOptions.waitOptions(Duration.ofMillis(500)))
+						.moveTo(PointOption.point(rec.getX() + rec.getWidth()/2, rec.getY() +(rec.getHeight()/2)-30 ))
+						.release();
+				action.perform();
+				
+				i++;
+				
+			}
+			
+		}
+		
+		AndroidElement selectButton  = (AndroidElement) new WebDriverWait(adDriver, config.getElementSearchTimeout()).until(
+				ExpectedConditions.presenceOfElementLocated(By.xpath("//android.widget.Button[@content-desc='"+ config.getResourceValue("select_new_calendar_button")+"']")));
+		selectButton.click();
+	}
 	
-		System.out.println(propertyResourceBundle.getString("next_button"));
+	
+	private void selectDateFromCalendar() {
+		
 	}
 	
 	/**

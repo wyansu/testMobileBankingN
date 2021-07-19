@@ -43,6 +43,7 @@ public class MBTestConfiguration implements TestConfiguration{
 	private String sheetName;
 	
 	private ResourceBundle resource;
+	private Locale locale;
 	
 	
 	public MBTestConfiguration(String fileIn, String fileOut, String sheetName)  {
@@ -83,8 +84,9 @@ public class MBTestConfiguration implements TestConfiguration{
 			elementSearchTimeout = Math.toIntExact(timeout);
 			
 			String languageTest = (String) configJSON.get("languageTest");
+			locale = new Locale(languageTest, "ID");
 			
-			resource = ResourceBundle.getBundle("lang/String", new Locale(languageTest, "ID"));
+			resource = ResourceBundle.getBundle("lang/String", locale);
 			resource.clearCache(); //we dont need cache since this only test
 			System.out.println("Info: Test running with language set to: " + resource.getLocale());
 			
@@ -198,6 +200,24 @@ public class MBTestConfiguration implements TestConfiguration{
 		
 	}
 	
+	
+	public void saveScreenshot(int colNumber, byte[] scrFile ) {
+		
+		int col = colNumber;
+		
+		CreationHelper helper = workbook.getCreationHelper();
+		Drawing drawing = sheet.createDrawingPatriarch();
+		ClientAnchor anchor = helper.createClientAnchor();
+		anchor.setCol1(col);
+		anchor.setRow1(this.nextSequence);
+		int pictureIdx = workbook.addPicture(scrFile, Workbook.PICTURE_TYPE_PNG);
+		
+		Picture pic = drawing.createPicture(anchor, pictureIdx);
+		pic.resize();
+		pic.resize(0.3);
+		
+	}
+	
 	public void writeToTestOuput(String columnName, String word) {
 		
 		int col = header.indexOf(columnName);
@@ -217,6 +237,10 @@ public class MBTestConfiguration implements TestConfiguration{
 	
 	public String getResourceValue(String resource) {
 		return this.resource.getString(resource);
+	}
+	
+	public Locale getLocale() {
+		return locale;
 	}
 
 }
