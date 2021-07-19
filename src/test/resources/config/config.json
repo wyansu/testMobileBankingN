@@ -1,0 +1,15 @@
+{
+	"capabilities" : {
+		"MobileCapabilityType.AUTOMATION_NAME":"UiAutomator2",
+		"MobileCapabilityType.PLATFORM_NAME":"Android",
+		"dontStopAppOnReset":"true",
+		"appActivity":"MainActivity",
+		"appPackage":"com.bankbtpns.mobilebanking",
+		"autoGrantPermissions":"true"
+	},
+	
+	"appiumURL":"http://localhost:4723/wd/hub",
+	"elementSearchTimeout":15,
+	"languageTest":"in"
+	
+}
